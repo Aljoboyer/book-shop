@@ -30,7 +30,7 @@ const loginController = async (req, res) => {
 // User Signup
 const userSignUpController = async (req, res) => {
 
-    const { email, password, name } =
+    const { email, password, userName } =
       req.body;
 
     try {
@@ -45,7 +45,7 @@ const userSignUpController = async (req, res) => {
       const result = await UserCollection.create({
         email: email,
         password: hashedPassword,
-        userName: name,
+        userName: userName,
       });
   
 
@@ -60,7 +60,31 @@ const userSignUpController = async (req, res) => {
       console.log(error);
     }
   };
-  
+
+  const getUserController = async (req, res) => {
+    
+    const { token } = req.query;
+   
+    try {
+    
+      jwt.verify(token, "B00kSh0p007", async (err, decoded) => {
+        req.user = decoded;
+        if (err) {
+          return res.status(403).json({ error: 'Invalid token' });
+        }
+        else{
+            const user = await UserCollection.findOne({ email: req?.user?.email });
+            return res.send(user);
+        }
+
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+    }
+  };
+
 module.exports = {
     userSignUpController,
-    loginController  };
+    loginController,
+    getUserController
+  };
