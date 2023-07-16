@@ -16,7 +16,7 @@ const loginController = async (req, res) => {
     if (!isPasswordCorrect)
       return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, 'B00kSh0p007',  {
+    const token = jwt.sign({ email: oldUser?.email, id: oldUser._id }, 'B00kSh0p007',  {
       expiresIn: "1h",
     });
 
@@ -64,7 +64,7 @@ const userSignUpController = async (req, res) => {
   const getUserController = async (req, res) => {
     
     const { token } = req.query;
-   
+
     try {
     
       jwt.verify(token, "B00kSh0p007", async (err, decoded) => {
@@ -74,6 +74,7 @@ const userSignUpController = async (req, res) => {
         }
         else{
             const user = await UserCollection.findOne({ email: req?.user?.email });
+
             return res.send(user);
         }
 

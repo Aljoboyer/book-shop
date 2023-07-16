@@ -14,8 +14,10 @@ connectDB()
 
 //Importing route
 const userRoutes = require("./src/modules/user/user.routes");
+const bookRoutes = require("./src/modules/book/book.routes");
 
 app.use("/user", userRoutes);
+app.use("/book", bookRoutes);
 
 app.get('/', (req , res) => {
   res.send('Hello World!')
